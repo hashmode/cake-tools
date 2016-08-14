@@ -7,9 +7,9 @@ var CT_TEXT = '<?php echo json_encode($this->Assistant->getConfig('text.view'));
 
 <?php
     if (!isset($css) || $css !== false) {
-        echo $this->Html->css('CakeTools.core.css');
+        echo $this->Html->css('CakeTools.core.min.css');
     }
     if (!isset($js) || $js !== false) {
-        echo $this->Html->script('CakeTools.core.js');
+        echo $this->Html->script('CakeTools.core.min.js');
     }
 ?>
