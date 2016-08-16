@@ -124,64 +124,6 @@ class SecurityToolsComponent extends Component
 		return $hash;
 	}
 
-    /**
-     * getRandomString method
-     * get random string using /dev/urandom
-     *
-     * @link http://security.stackexchange.com/a/3939/38200
-     *      
-     * @param number $length            
-     * @param string|boolean $hash
-     *            - if false base64 encoded string will be returned,
-     *            if true - sha256,
-     *            if string ('md5', 'sha1', 'sha256', 'sha384', 'sha512') hash function will be applied
-     * @throws Exception - if urandom can not be used or invalid hashing algorithm is provided
-     * @return string
-     *
-     */
-    public function getRandomString($length = null, $hash = false)
-    {
-        if (! $length) {
-            $length = 50;
-        }
-
-		$fp = @fopen('/dev/urandom','rb');
-		if ($fp === false) {
-			throw new Exception('Can not use urandom');
-		}
-
-		$pr_bits = @fread($fp, $length);
-		@fclose($fp);
-		
-		if (!$pr_bits) {
-			throw new Exception('Unable to read from urandom');
-		}
-		
-		if ($hash) {
-			if (is_bool($hash)) {
-				return Security::hash($pr_bits, 'sha256', true);
-			} elseif (in_array($hash, ['md5', 'sha1', 'sha256', 'sha384', 'sha512'])) {
-				return Security::hash($pr_bits, $hash, true);
-			} else {
-				throw new Exception('Invalid hashing algorithm '.$hash);
-			}
-		}
-
-		return substr(base64_encode($pr_bits), 0, $length);
-	}
-	
-	
-	/**
-	 * getUniqueToken method
-	 * 
-	 * @param string $long
-	 * @return string
-	 */
-	public function getUniqueToken($long = true)
-	{
-	    return $this->getRandomString(300, $long ? 'sha512' : 'sha256');
-	}
-	
 	
 	/**
 	 * checkUserPermission method - checks if the record belongs to the user for the given model
