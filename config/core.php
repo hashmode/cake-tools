@@ -174,6 +174,65 @@ if (!function_exists('generateRandomStr')) {
 }
 
 
+if (!function_exists('getRandomStr')) {
+
+    /**
+     * getRandomStr method
+     * get random string using /dev/urandom
+     *
+     * @link http://security.stackexchange.com/a/3939/38200
+     *      
+     * @param number $length            
+     * @param string|bool $hash
+     * @return string
+     */
+    function getRandomStr($length = null, $hash = false)
+    {
+        if (! $length) {
+            $length = 50;
+        }
+        
+        $fp = @fopen('/dev/urandom', 'rb');
+        if ($fp === false) {
+            throw new Exception('Can not use urandom');
+        }
+        
+        $pr_bits = @fread($fp, $length);
+        @fclose($fp);
+        
+        if (! $pr_bits) {
+            throw new Exception('Unable to read from urandom');
+        }
+        
+        if ($hash) {
+            if ($hash) {
+                if (is_string($hash) && in_array($hash, hash_algos())) {
+                    $string = hash($hash, $pr_bits);
+                } else {
+                    $string = hash('sha512', $pr_bits);
+                }
+            }
+        }
+        
+        return substr(base64_encode($pr_bits), 0, $length);
+    }
+}
+
+if (!function_exists('getUniqueToken')) {
+    /**
+     * getUniqueToken method
+     * wrapper for getRandomStr
+     *
+     * @param bool $long
+     * @return string
+     */
+    function getUniqueToken($long = true)
+    {
+        return getRandomStr(300, $long ? 'sha512' : 'sha256');
+    }
+}
+
+
 if (! function_exists('coalesce')) {
 
     /**
@@ -413,7 +472,7 @@ if (!function_exists('checkFileExists')) {
 	 * @param string $path
 	 * @param string $fileName
 	 * @param number $n
-	 * @return string|boolean
+	 * @return string|bool
 	 */
 	function checkFileExists($path, $fileName, $n = 100)
 	{
@@ -887,7 +946,7 @@ if (!function_exists('getQueryParams')) {
 	 * @param string $url
 	 * @param string $params
 	 * @param bool $onlyQuery - if true the param will be checked only in the query string, default - false
-	 * @return mixed - string if found the param, boolean false otherwise
+	 * @return mixed - string if found the param, bool false otherwise
 	 */
 	function getQueryParams($url, $param = '', $onlyQuery = false)
 	{
