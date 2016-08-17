@@ -1,5 +1,13 @@
 <?php
 use Cake\Core\Configure;
+use Cake\Cache\Cache;
+
+/** 
+ * configure cache to be used from CLI - for __ function
+ */
+if (empty(Cache::configured())) {
+    Cache::config(Configure::consume('Cache'));
+}
 
 $defaultPath = 'services';
 if (!empty(Configure::read('CakeTools.config.router_path'))) {
@@ -231,8 +239,12 @@ Configure::write('CakeTools', $defaultConfig);
  * url path and directory name where plugin is installed
  * @var string
  */
-define('CT_ROUTER_PATH', $defaultPath);
-define('CT_ROUTER_NAME', 'cake_tools');
+if (defined('CT_ROUTER_PATH')) {
+    define('CT_ROUTER_PATH', $defaultPath);
+}
+if (defined('CT_ROUTER_NAME')) {
+    define('CT_ROUTER_NAME', 'cake_tools');
+}
 
 require_once 'core.php';
 require_once 'events.php';
