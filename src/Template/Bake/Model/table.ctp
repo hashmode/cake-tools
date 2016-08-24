@@ -109,7 +109,7 @@ class <%= $name %>Table extends Table
      */
     public function validationDefault(Validator $validator)
     {
-        $gv = new GlobalValidator($validator);
+        $gv = new GlobalValidator($validator, $this);
 <%
 
 $validationMethods = [];

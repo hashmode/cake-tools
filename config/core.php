@@ -6,23 +6,27 @@ use Cake\I18n\Time;
 use Cake\I18n\Date;
 
 if (!function_exists('is_natural')) {
-/**
- * is_natural method
- * checks if the given number is a natural number
- * 
- * @param int|float|array $number
- * @param bool $zero - if set to true zero will be considered
- * @return bool
- */
-	function is_natural($number, $zero = false)
-	{
-		if (!is_array($number)) {
-			$number = [$number];
-		}
-		
-		$s = false;
-		foreach ($number as $n) {
-			if (ctype_digit($n) && ($zero ? $n >= 0 : $n > 0)) {
+
+    /**
+     * is_natural method
+     * checks if the given number is a natural number
+     *
+     * @param int|float|array $number            
+     * @param bool $zero - if set to true zero will be considered
+     * @return bool
+     */
+    function is_natural($number, $zero = false)
+    {
+        if (! is_array($number)) {
+            $number = [
+                $number
+            ];
+        }
+        
+        $s = false;
+        foreach ($number as $n) {
+            $n = (string) $n;
+            if (ctype_digit($n) && ($zero ? $n >= 0 : $n > 0)) {
 				$s = true;
 				continue;
 			}
@@ -205,13 +209,13 @@ if (!function_exists('getRandomStr')) {
         }
         
         if ($hash) {
-            if ($hash) {
-                if (is_string($hash) && in_array($hash, hash_algos())) {
-                    $string = hash($hash, $pr_bits);
-                } else {
-                    $string = hash('sha512', $pr_bits);
-                }
+            if (is_string($hash) && in_array($hash, hash_algos())) {
+                $string = hash($hash, $pr_bits);
+            } else {
+                $string = hash('sha512', $pr_bits);
             }
+            
+            return $string;
         }
         
         return substr(base64_encode($pr_bits), 0, $length);
@@ -640,7 +644,7 @@ if (!function_exists('getUserDate')) {
         }
         
         $origDate = $date;
-        if (is_a($date, 'Cake\I18n\Time')) {
+        if (is_a($date, 'Cake\I18n\Time') || is_a($date, 'Cake\I18n\FrozenTime')) {
             $date = Date::createFromTimestamp($date->toUnixString(), $date->getTimezone());
         }
         
@@ -690,7 +694,7 @@ if (!function_exists('getUserDateTime')) {
             $date = Time::createFromFormat('Y-m-d H:i:s', $date, $serverTimezone);
         }
         
-        if (is_a($date, 'Cake\I18n\Time')) {
+        if (is_a($date, 'Cake\I18n\Time') || is_a($date, 'Cake\I18n\FrozenTime')) {
             $dt = $date->i18nFormat('YYY-MM-dd HH:mm:ss', $userTimezone);
             
             if ($raw === 'db') {
@@ -853,6 +857,10 @@ if (!function_exists('getRealIp')) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         } elseif (! empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif (! empty($_SERVER['HTTP_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_FORWARDED_FOR'];
+        } elseif (! empty($_SERVER['HTTP_VIA'])) {
+            $ip = $_SERVER['HTTP_VIA'];
         } else {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
@@ -1135,7 +1143,7 @@ if (Configure::read('CakeTools.config.bake_functions')) :
             ];
     
             $table = Inflector::underscore($modelClass);
-            $fieldsConfig = Configure::read('BakeConfig.fields');
+            $fieldsConfig = Configure::read('CakeTools.bake_config.fields');
     
             $dbManager = \Cake\Datasource\ConnectionManager::get('default');
             $dbCollection = $dbManager->schemaCollection();

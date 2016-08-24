@@ -77,6 +77,8 @@ class SecurityToolsComponent extends Component
             if (empty($hash)) {
                 return false;
             }
+            
+            $hash = $hash->password;
         }
         
         $key = Configure::read('CakeTools.security.password_key');
@@ -111,7 +113,7 @@ class SecurityToolsComponent extends Component
         
         $key = Configure::read('CakeTools.security.password_key');
         
-        if (!$key) {
+        if (empty($key)) {
             throw new Exception('password_key is not set');
         }
 

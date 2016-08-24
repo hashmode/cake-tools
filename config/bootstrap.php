@@ -79,6 +79,7 @@ $defaultConfig = [
                 'action_btn' => 'default',
                 'action_btn_size' => 'xs',
                 'link_btn' => 'default',
+                'link_block' => false
             ]
         ]
     ],
@@ -239,10 +240,10 @@ Configure::write('CakeTools', $defaultConfig);
  * url path and directory name where plugin is installed
  * @var string
  */
-if (defined('CT_ROUTER_PATH')) {
+if (!defined('CT_ROUTER_PATH')) {
     define('CT_ROUTER_PATH', $defaultPath);
 }
-if (defined('CT_ROUTER_NAME')) {
+if (!defined('CT_ROUTER_NAME')) {
     define('CT_ROUTER_NAME', 'cake_tools');
 }
 

@@ -121,22 +121,29 @@ class AssistantHelper extends Helper
             $title = '<span class="glyphicon glyphicon-'.$options['icon'].' mr5" aria-hidden="true"></span>' . $title;
             $options['escape'] = false;
         }
-
-        if (!empty($options['btn'])) {
-            $options['escape'] = false;
-            if (empty($options['class'])) {
-                $options['class'] = '';
-            }
-            
-            $options['class'] .= ' btn btn-' . (is_string($options['btn']) ? $options['btn'] : $this->viewConfig['html']['link_btn']);
+        
+        if (empty($options['class'])) {
+            $options['class'] = '';
         }
         
-        if (isset($options['size']) && $options['size']) {
-            if (empty($options['class'])) {
-                $options['class'] = '';
+        if (! empty($options['btn'])) {
+            if ($options['btn'] === true) {
+                $options['class'] .= ' btn btn-' . $this->viewConfig['html']['link_btn'];
+            } else {
+                $options['class'] .= ' btn btn-' . $options['btn'];
             }
             
-            $options['class'] .= ' btn-' . $options['size'];
+            if (!empty($options['block']) && $options['block'] === true) {
+                $options['class'] .= ' btn-block';
+            } elseif (isset($options['block']) && $options['block'] === false) {
+                ; // ok
+            } elseif (!empty($this->viewConfig['html']['link_block'])) {
+                $options['class'] .= ' btn-block';
+            }
+            
+            if (!empty($options['size'])) {
+                $options['class'] .= ' btn-' . $options['size'];
+            }
         }
         
         return $this->Html->link($title, $url, $options);
@@ -160,25 +167,17 @@ class AssistantHelper extends Helper
             $options['class'] = '';
         }
 
-        /** 
-         * either btn is set and is not false 
-         * or
-         * btn is not set and class is empty
-         * or
-         * btn is not set and class is not empty
-         */
-        if (!empty($options['btn']) 
-            || empty($options['class']) 
-            || (!empty($options['class']) && !strstr($options['class'], 'btn'))) {
-
+        if (isset($options['btn']) && $options['btn'] === false) {
+            ; //
+        } else {
             $options['class'] .= ' btn btn-' . (!empty($options['btn']) ? $options['btn'] : $this->viewConfig['form']['submit_btn']);
         }
-        
+
         if (!empty($options['block']) || !empty($this->viewConfig['form']['submit_block'])) {
             $options['class'] .= ' btn-block';
         }
 
-        if (!isset($options['data-loading-text']) || (isset($options['data-loading-text']) && $options['data-loading-text'] != false)) {
+        if (!isset($options['data-loading-text']) || (isset($options['data-loading-text']) && $options['data-loading-text'] !== false)) {
             $options['data-loading-text'] = $this->textConfig['view']['submit_loading'];
         }
         
