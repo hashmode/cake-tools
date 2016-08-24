@@ -13,7 +13,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-$prefix = strtolower($prefix);
+$prefix = bake_get_prefix($prefix);
  
 if ($prefix == 'admin') {
     echo $this->element('admin/form');

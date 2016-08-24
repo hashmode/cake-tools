@@ -28,12 +28,13 @@ extract($bakeData);
     <h3><?php echo __('<%= $pluralHumanName %>') ?></h3>
 <%
 	if (!empty($_actions['add'])) {
-		$_actions['add'] = is_string($_actions['add']) ? $_actions['add'] : '/'.$modelClass.'/add';
+		$_actions['add'] = is_string($_actions['add']) ? $_actions['add'] : '/'.lcfirst($modelClass).'/add';
 		
 		if (!empty($prefix)) {
-			$_actions['add'] = strtolower($prefix) . '/' . $_actions['add'];
+			$prefix = bake_get_prefix($prefix);
+			$_actions['add'] = '/' . $prefix . $_actions['add'];
 		}
-		 
+
 		$addOptionStr = "['icon' => 'plus'";
 
 		if ($buttonType) {
@@ -168,10 +169,10 @@ endforeach; %>
 %>
                 <td class="actions">
 <%
-			$orderAction = false;
-			$viewAction = false;
-			$editAction = false;
-			$deleteAction = false;
+			$orderAction = "''";
+			$viewAction = "''";
+			$editAction = "''";
+			$deleteAction = "''";
 			if (!empty($_actions)) {
 				if (!empty($_actions['order'])) {
     				$orderAction = is_string($_actions['order']) ? $_actions['order'] . $singularVar->$primaryKey[0] : $_actions['order'];
@@ -186,7 +187,7 @@ endforeach; %>
 				}
 				
 				if (!empty($_actions['delete'])) {
-    				$deleteAction = is_string($_actions['delete']) ? $_actions['delete'] . $singularVar->$primaryKey[0] : $_actions['delete'];
+					$deleteAction = is_string($_actions['delete']) ? $_actions['delete'] . $singularVar->$primaryKey[0] : $_actions['delete'];
 				}
 			}
 			$statusStr = $hasStatus ? "'statusValue' => $".$singularVar."->status" : "''";

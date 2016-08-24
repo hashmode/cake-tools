@@ -613,6 +613,11 @@ function loadDefaults() {
 			enable($("#"+$(this).attr('target')));
 		}
 	});
+	
+	/**
+	 * prevent form browser validation
+	*/
+	$("form").attr("novalidate", "novalidate");
 }
 
 /**
@@ -766,8 +771,6 @@ $(document).ready(function(){
 	$(document).on('click', ".disabled", function() {
 		return false;
 	});
-	
-	$("form").attr("novalidate", "novalidate");
 	
 	/**
 	 * enable/disable send button, on input/textarea typing

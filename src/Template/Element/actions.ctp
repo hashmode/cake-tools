@@ -5,7 +5,8 @@
 	$isDelete = isset($deleteAction) && $deleteAction ? $deleteAction : false;
 	$isOrder = isset($orderAction) && $orderAction ? $orderAction : false;
 	$isList = isset($listAction) && $listAction ? $listAction : false;
-	
+
+	$modelValue = isset($modelValue) ? lcfirst($this->Assistant->inflector('camelize', $modelValue)) : false;
 	$modelValueSingular = isset($modelValue) ? $this->Assistant->inflector('singularize', $modelValue) : '';
 	$noun = !empty($nounValue) ? $nounValue : (!empty($modelValueSingular) ? __($modelValueSingular) : __('item'));
 	
