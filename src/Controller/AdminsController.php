@@ -6,6 +6,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Core\Exception\Exception;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
+use Cake\I18n\Time;
 
 /**
  * Users Controller
@@ -105,7 +106,7 @@ class AdminsController extends AppController
         if ($model->hasField('deleted')) {
             $data = [
                 'id' => $id,
-                'deleted' => CURRENT_TIME
+                'deleted' => new Time()
             ];
 
             $conn->begin();

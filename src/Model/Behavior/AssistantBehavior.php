@@ -751,6 +751,25 @@ class AssistantBehavior extends Behavior
     }
 
     /**
+     * getColumnList method
+     * 
+     * @param bool $unsetId
+     * @return array - list of 
+     */
+    public function getColumnList($unsetId = false)
+    {
+        $columns = $this->getColumnTypes();
+        $fields = array_keys($columns);
+        
+        if ($unsetId) {
+            $key = array_search('id', $fields);
+            unset($fields[$key]);
+        }
+        
+        return $fields;
+    }
+
+    /**
      * getAliasSetting method
      * 
      * @param string $key

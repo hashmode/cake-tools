@@ -345,7 +345,7 @@ function generateRandomStr(length, alphanumeric) {
 
 
 /**
- * scroll2 method
+ * scrollToElement method
  * scrolls to the given element in a given time
  * 
  * @param {object} $element
@@ -354,7 +354,7 @@ function generateRandomStr(length, alphanumeric) {
  * @param {string} callback - callback function to call after scrolling is done
  * @return void  
 */
-function scroll2($element, time, correct, callback) {
+function scrollToElement($element, time, correct, callback) {
 	var position = false;
 	
 	try {
