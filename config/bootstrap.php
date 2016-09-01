@@ -206,12 +206,14 @@ $defaultConfig = [
                 ],
                 'exclude' => [
                 ],
+                /**
+                 * 'add' => true,
+                 * 'view' => true,
+                 * 'edit' => true,
+                 * 'delete' => true
+                 * 'order' => true
+                 */
                 'actions' => [
-                    'add' => true,
-                    'view' => true,
-                    'edit' => true,
-                    'delete' => true,
-                    'order' => true
                 ]
             ],
             'models' => [

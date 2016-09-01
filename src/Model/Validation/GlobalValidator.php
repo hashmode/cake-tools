@@ -266,28 +266,70 @@ class GlobalValidator extends Validator
      * checks for the given foreign key field for notEmpty, notBlank and numeric/natural number
      * 
      * @param string $field
-     * @param bool $naturalNumber
      * @param bool $allowEmpty
+     * @param string $message
      * @return $this
      */
-    public function isNumeric($field, $naturalNumber = false, $allowEmpty = false)
+    public function isNumeric($field, $allowEmpty = false, $message = null)
     {
         $humanField = Inflector::humanize($field);
+        
+        if (empty($message)) {
+            $message = __('{0} should be numeric', $humanField);
+        }
 
         if ($allowEmpty) {
             $this->validator->allowEmpty($field);
         } else {
-            $this->isNotEmpty($field);
+            $this->isNotEmpty($field, null, $humanField);
         }
 
-        if ($naturalNumber) {
-            $this->validator->naturalNumber($field, __('{0} should be natural number', $humanField));
-        } else {
-            $this->validator->numeric($field, __('{0} should be numeric', $humanField));
-        }
+        $this->validator->numeric($field, __('{0} should be numeric', $humanField));
 
         return $this;
     }
+    
+    
+    /** 
+     * isNaturalNumber method
+     * checks for the given foreign key field for notEmpty, notBlank and to be natural number
+     * 
+     * @param string $field
+     * @param bool $allowZero
+     * @param bool $allowEmpty
+     * @param string $message
+     * @return $this
+     */
+    public function isNaturalNumber($field, $allowZero = false, $allowEmpty = null, $message = null)
+    {
+        $humanField = Inflector::humanize($field);
+        
+        if (empty($message)) {
+            $message = __('{0} should be a natural number', $humanField);
+        }
+
+        if ($allowEmpty) {
+            $this->validator->allowEmpty($field);
+        } else {
+            $this->isNotEmpty($field, null, $humanField);
+        }
+
+        $this->validator->add($field, [
+            'naturalNumber' => [
+                'rule' => function ($value, $context) use ($allowZero) {
+                    if (is_natural($value, $allowZero)) {
+                        return true;
+                    }
+            
+                    return false;
+                },
+                'message' => $message
+            ]
+        ]);
+
+        return $this;
+    }
+    
     
     
     /**
