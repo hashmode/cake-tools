@@ -79,6 +79,7 @@ class UsersController extends AppController
     {
         $this->autoRender = false;
         echo $this->AuthTools->captchaImage();
+        die();
     }
 
 
