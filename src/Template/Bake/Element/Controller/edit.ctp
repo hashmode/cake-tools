@@ -36,7 +36,7 @@ $currentModelData = bake_get_model_fields($currentModelName, 'form');
             $<%= $singularName %> = $this-><%= $currentModelName %>->patchEntity($<%= $singularName %>, $this->request->data);
             if ($this-><%= $currentModelName; %>->save($<%= $singularName %>)) {
                 $this->Flash->success(__('The <%= strtolower($singularHumanName) %> has been saved.'));
-                return $this->redirect('/<%=$name;%>/index');
+                return $this->redirect('/<%=lcfirst($name);%>/index');
             } else {
                 $this->Flash->error(__('The <%= strtolower($singularHumanName) %> could not be saved. Please, try again.'));
             }

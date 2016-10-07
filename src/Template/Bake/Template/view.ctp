@@ -15,6 +15,7 @@
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 
+$bakeConfig = Configure::read('CakeTools.bake_config');
 $modelConstStatus = "Const".$modelClass."Status";
 
 $associations += ['BelongsTo' => [], 'HasOne' => [], 'HasMany' => [], 'BelongsToMany' => []];
@@ -55,7 +56,7 @@ $groupedFields += ['number' => [], 'string' => [], 'boolean' => [], 'date' => []
 $pk = "\$$singularVar->{$primaryKey[0]}";
 %>
 <div class="<%= $pluralVar %> view content">
-    <h3><?= h($<%= $singularVar %>-><%= $displayField %>) ?></h3>
+    <<%=$bakeConfig['view_heading_tag']%>><?= h($<%= $singularVar %>-><%= $displayField %>) ?></<%=$bakeConfig['view_heading_tag']%>>
     <table class="table table-striped table-bordered vertical-table">
 <% if ($groupedFields['string']) : %>
 <% foreach ($groupedFields['string'] as $field) : %>

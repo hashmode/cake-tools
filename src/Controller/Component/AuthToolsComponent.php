@@ -37,7 +37,7 @@ class AuthToolsComponent extends Component
     /**
      * @var mixed
      */
-    protected $captchaSettings = [];
+    protected $loginSettings = [];
 
     /**
      * @var mixed
@@ -73,7 +73,7 @@ class AuthToolsComponent extends Component
             ];
         }
 
-        $this->captchaSettings = Configure::read('CakeTools.security.login_captcha');
+        $this->loginSettings = Configure::read('CakeTools.security.login');
     }
     
     
@@ -113,7 +113,7 @@ class AuthToolsComponent extends Component
         /** 
          * if captcha is disabled - all good
          */
-        if ($this->captchaSettings['field'] === false) {
+        if ($this->loginSettings['field'] === false) {
             return true;
         }
 
@@ -133,8 +133,8 @@ class AuthToolsComponent extends Component
                     return false;
                 }
             } else {
-                $count = $this->captchaSettings['limit'];
-                if (isset($userData->{$this->captchaSettings['field']}) && $userData->{$this->captchaSettings['field']} >= $count) {
+                $count = $this->loginSettings['limit'];
+                if (isset($userData->{$this->loginSettings['field']}) && $userData->{$this->loginSettings['field']} >= $count) {
                     $this->showCaptcha = true;
                     return false;
                 }
@@ -144,7 +144,7 @@ class AuthToolsComponent extends Component
         /** 
          * for get request
          */
-        if ($this->captchaSettings['field'] === true) {
+        if ($this->loginSettings['field'] === true) {
             // always show captcha
             $this->showCaptcha = true;
         }
@@ -177,15 +177,19 @@ class AuthToolsComponent extends Component
             $this->authFields['password']
         ]);
         
+        if (!empty($this->loginSettings['conditions'])) {
+            $query->where($this->loginSettings['conditions']);
+        }
+            
         if ($this->controller->Users->hasField('group_id')) {
             $query->select([
                 'group_id'
             ]);
         }
         
-        if (is_string($this->captchaSettings['field'])) {
+        if (is_string($this->loginSettings['field'])) {
             $query->select([
-                $this->captchaSettings['field']
+                $this->loginSettings['field']
             ]);
         }
         
@@ -217,10 +221,10 @@ class AuthToolsComponent extends Component
         
         if ($this->SecurityTools->checkPassword($password, $userData->{$this->authFields['password']})) {
             // reset failed login count
-            if (is_string($this->captchaSettings['field'])) {
+            if (is_string($this->loginSettings['field'])) {
                 $data = [
                     'id' => $userData->id,
-                    $this->captchaSettings['field'] => 0
+                    $this->loginSettings['field'] => 0
                 ];
                 
                 $this->controller->Users->saveOne($data, [
@@ -232,16 +236,16 @@ class AuthToolsComponent extends Component
 
             return true;
         } else {
-            if (is_string($this->captchaSettings['field'])) {
+            if (is_string($this->loginSettings['field'])) {
                 $data = [
                     'id' => $userData->id,
-                    $this->captchaSettings['field'] => $userData->{$this->captchaSettings['field']} + 1
+                    $this->loginSettings['field'] => $userData->{$this->loginSettings['field']} + 1
                 ];
 
                 $this->controller->Users->saveOne($data, ['check' => false]);
 
                 // if this is the n-th wrong attempt - show captcha
-                if ($userData->{$this->captchaSettings['field']} >= $this->captchaSettings['limit']) {
+                if ($userData->{$this->loginSettings['field']} >= $this->loginSettings['limit']) {
                     $this->showCaptcha = true;
                 }
             }
@@ -255,7 +259,7 @@ class AuthToolsComponent extends Component
      */
     public function captchaImage()
     {
-        return $this->Captcha->image($this->captchaSettings['count']);
+        return $this->Captcha->image($this->loginSettings['count']);
     }
     
 }

@@ -15,17 +15,13 @@
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 
-$tableClass = Configure::read('CakeTools.bake_config.tableClass');
-$buttonType = Configure::read('CakeTools.bake_config.buttonType');
-$actionsElement = Configure::read('CakeTools.bake_config.actionsElement');
-$paginationElement = Configure::read('CakeTools.bake_config.paginationElement');
-
+$bakeConfig = Configure::read('CakeTools.bake_config');
 $bakeData = bake_get_model_fields($modelClass, 'index');
 extract($bakeData);
 
 %>
 <div class="<%= $pluralVar %> index content">
-    <h3><?php echo __('<%= $pluralHumanName %>') ?></h3>
+    <<%=$bakeConfig['index_heading_tag']%>><?php echo __('<%= $pluralHumanName %>') ?></<%=$bakeConfig['index_heading_tag']%>>
 <%
 	if (!empty($_actions['add'])) {
 		$_actions['add'] = is_string($_actions['add']) ? $_actions['add'] : '/'.lcfirst($modelClass).'/add';
@@ -37,8 +33,8 @@ extract($bakeData);
 
 		$addOptionStr = "['icon' => 'plus'";
 
-		if ($buttonType) {
-			$addOptionStr .= ", 'btn' => ".$buttonType."]";
+		if (!empty($bakeConfig['button_type'])) {
+			$addOptionStr .= ", 'btn' => ".$bakeConfig['button_type']."]";
 		} else {
 			$addOptionStr .= ", 'btn' => true]";
 		}
@@ -52,7 +48,7 @@ extract($bakeData);
 	}
 %>   
 	<?php if (count($<%=$pluralVar;%>) > 0) {?> 
-    <table cellpadding="0" cellspacing="0" class="<%=$tableClass%> <% echo $_listCheckbox ? 'checkbox-group' : ''; %>">
+    <table cellpadding="0" cellspacing="0" class="<%=$bakeConfig['table_class']%> <% echo $_listCheckbox ? 'checkbox-group' : ''; %>">
         <thead>
             <tr>
 <% foreach ($_fields as $field => $fieldData): %>
@@ -193,7 +189,7 @@ endforeach; %>
 			$statusStr = $hasStatus ? "'statusValue' => $".$singularVar."->status" : "''";
 %>
         			<?php 
-        			     echo $this->element('<%=$actionsElement;%>', 
+        			     echo $this->element('<%=$bakeConfig["actions_element"];%>', 
         			         [
         			             'idValue' => $<%=$singularVar;%>-><%=$primaryKey[0]%>,
         						 'modelValue' => '<%=$modelClass;%>', 
@@ -211,7 +207,7 @@ endforeach; %>
         </tbody>
     </table>
     
-    <?php echo $this->element('<%=$paginationElement;%>');?>
+    <?php echo $this->element('<%=$bakeConfig["pagination_element"];%>');?>
     
 	<?php } else { ?>
     	<div class="row empty-list">

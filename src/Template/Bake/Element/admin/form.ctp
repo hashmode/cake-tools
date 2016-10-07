@@ -15,26 +15,21 @@
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 
-$formClass = Configure::read('CakeTools.bake_config.formClass');
-$buttonClass = Configure::read('CakeTools.bake_config.buttonClass');
-$buttonType = Configure::read('CakeTools.bake_config.buttonType');
-$actionsElement = Configure::read('CakeTools.bake_config.actionsElement');
-$tinymceMin = Configure::read('CakeTools.bake_config.tinymceMin');
-$tinymceInit = Configure::read('CakeTools.bake_config.tinymceInit');
+$bakeConfig = Configure::read('CakeTools.bake_config');
 
 $bakeData = bake_get_model_fields($modelClass, 'form');
 extract($bakeData);
 
 if (count($_tinymceFields) > 0) {
 %>
-<?php echo $this->Html->script('<% echo $tinymceMin; %>'); ?>
+<?php echo $this->Html->script('<% echo $bakeConfig["tinymce_min"]; %>'); ?>
 <%
 }
 %>
 
-<div class="<%= $pluralVar %> form content <% echo $formClass %>">
+<div class="<%= $pluralVar %> form content <% echo $bakeConfig['form_class'] %>">
     <?php echo $this->Form->create($<%= $singularVar %>) ?>
-        <h2><?php echo __('<%= Inflector::humanize($action) %> <%= $singularHumanName %>') ?></h2>
+        <<%=$bakeConfig['form_heading_tag']%>><?php echo __('<%= Inflector::humanize($action) %> <%= $singularHumanName %>') ?></<%=$bakeConfig['form_heading_tag']%>>
         <?php
 <%
 
@@ -80,15 +75,15 @@ if (count($_tinymceFields) > 0) {
         }
         
         $submitOptions = "";
-        if ($buttonType) {
-            $submitOptions = ", ['btn' => '".$buttonType."'";
+        if (!empty($bakeConfig['button_type'])) {
+            $submitOptions = ", ['btn' => '".$bakeConfig['button_type']."'";
         }
 
-        if ($buttonClass) {
+        if (!empty($bakeConfig['button_class'])) {
             if ($submitOptions) {
-                $submitOptions .= ", 'class' => '".$buttonClass."' ";
+                $submitOptions .= ", 'class' => '".$bakeConfig['button_class']."' ";
             } else {
-                $submitOptions = ", ['class' => '".$buttonClass."'";
+                $submitOptions = ", ['class' => '".$bakeConfig['button_class']."'";
             }
         }
 
@@ -106,7 +101,7 @@ if (count($_tinymceFields) > 0) {
 if (count($_tinymceFields) > 0) {
 %>
 <?php $this->TinymceElfinder->defineElfinderBrowser()?>
-<?php echo $this->Html->script('<% echo $tinymceInit; %>');?>
+<?php echo $this->Html->script('<% echo $bakeConfig["tinymce_init"]; %>');?>
 <%
 }
 %>

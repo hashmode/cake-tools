@@ -8,8 +8,8 @@ use Cake\Core\Configure;
 /**
  * Users Controller
  *
- * @property \App\Model\Table\ArticlesTable $Articles
  * @property \CakeTools\Controller\Component\AuthToolsComponent $AuthTools
+ * @property \CakephpCaptcha\Controller\Component\CaptchaComponent $Captcha
  */
 class UsersController extends AppController
 {
@@ -65,7 +65,7 @@ class UsersController extends AppController
                     return $this->redirect($this->Auth->redirectUrl());
                 }
             }
-            
+
             $this->Flash->error($errorMessage);
         }
     }
@@ -79,6 +79,7 @@ class UsersController extends AppController
     {
         $this->autoRender = false;
         echo $this->AuthTools->captchaImage();
+        die();
     }
 
 

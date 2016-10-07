@@ -70,6 +70,7 @@ $defaultConfig = [
         ]
     ],
     'view' => [
+        'layout' => 'admin',
         'helper' => [
             'form' => [
                 'submit_btn' => 'default',
@@ -92,10 +93,12 @@ $defaultConfig = [
              * the db field where hash should be saved 
              */
             'hash_field' => 'password_reset_hash',
+            
             /** 
              * the db field for reset request time 
              */
             'date_field' => 'password_reset_requested',
+
             /**
              * count - time after which password reset link will expire
              * e.g.
@@ -105,24 +108,33 @@ $defaultConfig = [
         ],
         
         /**
-         * @mixed
+         * array with params 
          */
-        'login_captcha' => [
+        'login' => [
             /** 
              * field in db
              * - boolean true - always show (field in db not required)
              * - boolean false - never show
-             * - array with params 
+             * - string
              */
             'field' => 'failed_login_count',
+            
             /**
              * after how many failed login attempts show the captcha 
              */
             'limit' => 3,
+            
             /** 
              * number of letters to show on captcha image
              */
-            'count' => 5
+            'count' => 5,
+            
+            /**
+             * conditions for user find 
+             */
+            'conditions' => [
+                
+            ],
         ],
         
         /**
@@ -144,15 +156,18 @@ $defaultConfig = [
         'app_key' => '',
     ],
     'bake_config' => [
-        'buttonClass' => '',
-        'buttonType' => '',
-        'formClass' => '',
-        'tableClass' => 'table table-striped table-bordered table-condensed',
-        'actionsElement' => 'CakeTools.actions',
-        'paginationElement' => 'CakeTools.pagination',
-        'textMaxLength' => 65000,
-        'tinymceMin' => 'tinymce/tinymce.min.js',
-        'tinymceInit' => 'tinymce_init.js',
+        'form_heading_tag' => 'h2',
+        'index_heading_tag' => 'h2',
+        'view_heading_tag' => 'h2',
+        'button_class' => '',
+        'button_type' => '',
+        'form_class' => '',
+        'table_class' => 'table table-striped table-bordered table-condensed',
+        'actions_element' => 'CakeTools.actions',
+        'pagination_element' => 'CakeTools.pagination',
+        'text_max_Length' => 65000,
+        'tinymce_min' => 'tinymce/tinymce.min.js',
+        'tinymce_init' => 'tinymce_init.js',
         /**
          * importance order
         *
