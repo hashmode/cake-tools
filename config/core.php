@@ -820,7 +820,7 @@ if (!function_exists('shorten')) {
 			return h($str);
 		}
 
-		return '<span title="'.h($str).'">'.h($shortStr).'</span>';
+		return '<span title="'.h(str_ireplace("/", "", $str)).'">'.h($shortStr).'</span>';
 	}
 }
 
