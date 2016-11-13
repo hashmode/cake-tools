@@ -751,6 +751,33 @@ class AssistantBehavior extends Behavior
     }
 
     /**
+     * field method
+     * find the given field based on primary key
+     *
+     * @param string $id            
+     * @param string $field            
+     * @return mixed - the field value if found, boolean false otherwise
+     */
+    public function field($id, $field = '')
+    {
+        $result = $this->_table->find()
+            ->where([
+            'id' => $id
+        ])
+            ->select([
+            $field
+        ])
+            ->first();
+        
+        if (! empty($result)) {
+            return $result->{$field};
+        }
+        
+        return false;
+    }
+    
+
+    /**
      * getColumnList method
      * 
      * @param bool $unsetId
