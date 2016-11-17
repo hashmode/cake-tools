@@ -119,13 +119,14 @@ class AdminsController extends AppController
             }
         } else {
             $conn->begin();
-            if ($model->deleteAll(['id' => $id])) {
+            $item = $model->get($id);
+            if (!empty($item) && $model->delete($item)) {
                 $conn->commit();
                 $this->Flash->success(__('{0} has been deleted', $singularAlias));
             } else {
                 $conn->rollback();
                 $this->Flash->error(__('{0} can not be deleted', $singularAlias));
-            }
+            }            
         }
 
         return $this->redirect($this->referer());
