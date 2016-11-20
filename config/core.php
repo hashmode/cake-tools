@@ -648,7 +648,7 @@ if (!function_exists('getUserDate')) {
             $date = Date::createFromTimestamp($date->toUnixString(), $date->getTimezone());
         }
         
-        if (is_a($date, 'Cake\I18n\Date')) {
+        if (is_a($date, 'Cake\I18n\Time') || is_a($date, 'Cake\I18n\FrozenTime')) {
             if ($time) {
                 $dt = $origDate->i18nFormat('YYY-MM-dd HH:mm:ss', $userTimezone);
             } else {
