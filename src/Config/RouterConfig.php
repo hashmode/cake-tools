@@ -114,7 +114,7 @@ class RouterConfig
      *                                      or array of given strings
      * @return bool
      */
-    public static function isReservedUrl()
+    public static function isReservedUrl($excludePrefix = false)
     {
         $url = self::getSlug();
         
