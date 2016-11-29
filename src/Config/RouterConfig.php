@@ -109,6 +109,9 @@ class RouterConfig
      * - plugins' name, path
      * - provided by Configure::write('CakeTools.config.reserved_paths', [ ... ])
      *
+     * @param string|array $excludePrefix - ignores the provided prefix if provided
+     *                                      either string - as regex
+     *                                      or array of given strings
      * @return bool
      */
     public static function isReservedUrl()
@@ -120,7 +123,16 @@ class RouterConfig
         }
         
         // get url's first param
-        $firstParam = current(explode("/", $url));
+        $urlArr = explode("/", $url);
+        $firstParam = current($urlArr);
+        
+        // check if first param should be excluded
+        if ($excludePrefix) {
+            if (is_array($excludePrefix) && in_array($firstParam, $excludePrefix)
+                || is_string($excludePrefix) && preg_match($excludePrefix, $firstParam)) {
+                $firstParam = isset($urlArr[1]) ? $urlArr[1] : '';
+            }
+        }
         
         // get controllers
         $controllers = self::getControllers();
