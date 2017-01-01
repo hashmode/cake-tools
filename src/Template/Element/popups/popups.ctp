@@ -89,15 +89,19 @@ $CT_CONFIRM_NODE = false;
 var CT_CONFIRM_BOX_STATUS = false;
 var CT_CONFIRM_BOX_CALLBACK = false;
 
-function confirmBox(message, callback) {
+function confirmBox(message, confirmBtnClass, callback) {
 	CT_CONFIRM_BOX_STATUS = false;
 	$("#confirmBoxMessage").html(message);
 	$("#confirmBox").modal('show');
 
-	if (typeof callback !== 'undefined') {
+	if (typeof callback !== 'undefined' && callback) {
 		CT_CONFIRM_BOX_CALLBACK = callback;
 	} else {
 		CT_CONFIRM_BOX_CALLBACK = false;
+	}
+
+	if (typeof confirmBtnClass !== 'undefined' && confirmBtnClass) {
+		$("#confirmBoxConfirm").addClass(confirmBtnClass);
 	}
 
 	return true;
