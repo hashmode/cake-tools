@@ -1086,6 +1086,18 @@ if (!function_exists('secondsToTime')) {
 	}
 }
 
+if (!function_exists('isCli')) {
+    
+    /**
+     * isCli method
+     * check if the current request is from CLI 
+     * 
+     * @return boolean
+     */
+    function isCli() {
+        return (php_sapi_name() === 'cli');
+    }
+}
 
 
 
