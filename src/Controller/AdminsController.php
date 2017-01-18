@@ -35,9 +35,12 @@ class AdminsController extends AppController
         }
 
         $className = 'Const' . $alias . 'Status';
+        $classNameSingular = 'Const' . Inflector::singularize($alias) . 'Status';
         $exists = false;
         if (class_exists($className)) {
             $statusList = getClassConstants($className);
+        } elseif (class_exists($classNameSingular)) {
+            $statusList = getClassConstants($classNameSingular);
         } else {
             $statusList = getClassConstants('ConstGeneralStatus');
         }
